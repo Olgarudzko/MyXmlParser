@@ -6,13 +6,13 @@ public final class ParsingFactory {
 
     private static final ParsingFactory instance = new ParsingFactory();
 
-    private final ParsingService parsingFactory = new XmlParsingService();
+    private final ParsingService parsingService = new XmlParsingService();
 
     private ParsingFactory() {
     }
 
-    public ParsingService getParsingFactory() {
-        return parsingFactory;
+    public ParsingService getParsingService() {
+        return parsingService;
     }
 
     public static ParsingFactory getInstance() {

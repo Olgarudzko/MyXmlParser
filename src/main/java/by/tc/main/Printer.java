@@ -9,61 +9,93 @@ import java.util.regex.Pattern;
 
 public class Printer {
 
-    public static final String SPACE_FOR_EVEN_LEVEL = "%evenreserved%";
-    public static final String SPACE_FOR_ODD_LEVEL = "%oddsreserved%";
+    public static final String RESERVED_FOR_EVEN_LEVEL_TAG = "%evenreserved%";
+    public static final String RESERVED_FOR_ODD_LEVEL_TAG = "%oddsreserved%";
+    public static final String BEAN_START_FORMATTING = "\n---";
+    public static final String BEAN_END_FORMATTING = "---\n";
+    public static final String FIRST_LINE_FORMATTING = "______";
+    public static final String PADDING_START = "   ";
 
-    public static void printData(EntireXml xml) {
+    private static StringBuilder readyXml;
+    private static Pattern evenPattern = Pattern.compile(RESERVED_FOR_EVEN_LEVEL_TAG);
+    private static Pattern oddPattern = Pattern.compile(RESERVED_FOR_ODD_LEVEL_TAG);
+    private static Matcher matcher;
 
-        StringBuilder readyXml = new StringBuilder();
-        readyXml.append(SPACE_FOR_EVEN_LEVEL);
-        Pattern evenPattern = Pattern.compile(SPACE_FOR_EVEN_LEVEL);
-        Pattern oddPattern = Pattern.compile(SPACE_FOR_ODD_LEVEL);
-        Matcher matcher;
-        int levelNumber=0;
+    public static void printXml(EntireXml xml) {
+
+        readyXml = new StringBuilder();
+        readyXml.append(RESERVED_FOR_EVEN_LEVEL_TAG);
+        int levelNumber = 0;
         for (Map.Entry<String, Integer> field : xml.getXmlStructure().entrySet()) {
+
             StringBuilder copyXml = new StringBuilder(readyXml);
-            matcher = (levelNumber % 2 == 0 ) ? evenPattern.matcher(copyXml) : oddPattern.matcher(copyXml);
+            matcher = (levelNumber % 2 == 0) ? evenPattern.matcher(copyXml) : oddPattern.matcher(copyXml);
 
             while (matcher.find()) {
-                Matcher newmatcher = (levelNumber % 2 == 0 ) ? evenPattern.matcher(readyXml) : oddPattern.matcher(readyXml);
-                newmatcher.find();
-                StringBuilder leftPadding = new StringBuilder();
-                for (int i=1; i<levelNumber; i++){
-                    leftPadding.append("   ");
-                }
-                StringBuilder replacer = (levelNumber != 0) ?
-                        new StringBuilder(leftPadding.toString()+"["+field.getKey().toUpperCase() + "]\n")
-                        : new StringBuilder("______"+field.getKey().toUpperCase() + "______\n\n");
-
-                for (int i = 0; i < field.getValue(); i++) {
-                    replacer.append((levelNumber%2==0) ? SPACE_FOR_ODD_LEVEL : SPACE_FOR_EVEN_LEVEL);
-                }
-                replacer.append("\n");
-
-                readyXml.replace(newmatcher.start(), newmatcher.end(), replacer.toString());
+                fillReservedWithTags(levelNumber, field);
             }
+
             levelNumber++;
         }
-        StringBuilder copyXml = new StringBuilder(readyXml);
-        matcher = (xml.getXmlStructure().size() % 2 == 0) ? evenPattern.matcher(copyXml) : oddPattern.matcher(copyXml);
-        int beanNumber=0;
-        while (matcher.find()) {
-            Matcher newmatcher = (xml.getXmlStructure().size() % 2 == 0) ? evenPattern.matcher(readyXml) : oddPattern.matcher(readyXml);
-            newmatcher.find();
-            readyXml.replace(newmatcher.start(), newmatcher.end(), stringBean(xml.getXmlBeans().get(beanNumber)));
-            beanNumber++;
-        }
+        insertBeansIntoStructure(xml);
         System.out.println(readyXml.toString());
     }
 
 
-    private static String stringBean(XmlBean bean) {
+    private static void fillReservedWithTags(int levelNumber, Map.Entry<String, Integer> field) {
+
+        Matcher reservedPlace = (levelNumber % 2 == 0) ?
+                evenPattern.matcher(readyXml) : oddPattern.matcher(readyXml);
+        reservedPlace.find();
+
+        StringBuilder leftPadding = new StringBuilder();
+        for (int i = 1; i < levelNumber; i++) {
+            leftPadding.append(PADDING_START);
+        }
+
+        StringBuilder replacer = (levelNumber != 0) ?
+                new StringBuilder(leftPadding.toString() + "[" + field.getKey().toUpperCase() + "]\n")
+                : new StringBuilder(FIRST_LINE_FORMATTING
+                .concat(field.getKey().toUpperCase()).concat(FIRST_LINE_FORMATTING).concat("\n\n"));
+
+        for (int i = 0; i < field.getValue(); i++) {
+            replacer.append((levelNumber % 2 == 0) ? RESERVED_FOR_ODD_LEVEL_TAG : RESERVED_FOR_EVEN_LEVEL_TAG);
+        }
+        replacer.append('\n');
+
+        readyXml.replace(reservedPlace.start(), reservedPlace.end(), replacer.toString());
+    }
+
+
+    private static void insertBeansIntoStructure(EntireXml xml) {
+
+        StringBuilder copyXml = new StringBuilder(readyXml);
+        matcher = (xml.getXmlStructure().size() % 2 == 0) ?
+                evenPattern.matcher(copyXml) : oddPattern.matcher(copyXml);
+
+        int beanNumber = 0;
+        while (matcher.find()) {
+            Matcher newmatcher = (xml.getXmlStructure().size() % 2 == 0) ?
+                    evenPattern.matcher(readyXml) : oddPattern.matcher(readyXml);
+            newmatcher.find();
+            readyXml.replace(newmatcher.start(), newmatcher.end(),
+                    formatBean(xml.getXmlBeans().get(beanNumber)));
+            beanNumber++;
+        }
+
+    }
+
+
+    private static String formatBean(XmlBean bean) {
+
         StringBuilder beanString = new StringBuilder();
-        beanString.append("\n---").append(bean.getBeanName().toUpperCase().concat("---\n"));
+        beanString.append(BEAN_START_FORMATTING).
+                append(bean.getBeanName().toUpperCase().concat(BEAN_END_FORMATTING));
         for (Map.Entry<String, String> field : bean.getBeanFields().entrySet()) {
             beanString.append(field.getKey().concat(": ")
                     .concat(field.getValue()).concat("\n"));
         }
+
         return beanString.toString();
     }
 }
