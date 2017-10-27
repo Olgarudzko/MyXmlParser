@@ -1,6 +1,6 @@
-package by.tc.dao;
+package by.tc.task02.dao;
 
-import by.tc.entity.XmlLevel;
+import by.tc.task02.entity.XmlLevel;
 
 public interface XmlDao {
 

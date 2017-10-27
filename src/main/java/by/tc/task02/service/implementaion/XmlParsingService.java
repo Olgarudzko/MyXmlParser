@@ -1,9 +1,9 @@
-package by.tc.service.implementaion;
+package by.tc.task02.service.implementaion;
 
-import by.tc.dao.DAOFactory;
-import by.tc.dao.XmlDao;
-import by.tc.entity.XmlLevel;
-import by.tc.service.ParsingService;
+import by.tc.task02.dao.DAOFactory;
+import by.tc.task02.dao.XmlDao;
+import by.tc.task02.entity.XmlLevel;
+import by.tc.task02.service.ParsingService;
 
 import java.io.File;
 import java.io.FileInputStream;

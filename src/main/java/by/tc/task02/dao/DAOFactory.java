@@ -1,6 +1,6 @@
-package by.tc.dao;
+package by.tc.task02.dao;
 
-import by.tc.dao.implementation.XmlParser;
+import by.tc.task02.dao.implementation.XmlParser;
 
 public final class DAOFactory {
 

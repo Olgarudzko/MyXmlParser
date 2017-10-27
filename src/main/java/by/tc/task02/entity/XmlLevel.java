@@ -1,4 +1,4 @@
-package by.tc.entity;
+package by.tc.task02.entity;
 
 import java.util.ArrayList;
 import java.util.List;

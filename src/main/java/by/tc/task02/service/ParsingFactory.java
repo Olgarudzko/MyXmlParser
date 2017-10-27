@@ -1,6 +1,6 @@
-package by.tc.service;
+package by.tc.task02.service;
 
-import by.tc.service.implementaion.XmlParsingService;
+import by.tc.task02.service.implementaion.XmlParsingService;
 
 public final class ParsingFactory {
 

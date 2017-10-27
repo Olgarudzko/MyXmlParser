@@ -1,6 +1,6 @@
-package by.tc.service;
+package by.tc.task02.service;
 
-import by.tc.entity.XmlLevel;
+import by.tc.task02.entity.XmlLevel;
 
 public interface ParsingService {
 

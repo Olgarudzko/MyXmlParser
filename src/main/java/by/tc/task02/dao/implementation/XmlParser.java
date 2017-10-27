@@ -1,7 +1,7 @@
-package by.tc.dao.implementation;
+package by.tc.task02.dao.implementation;
 
-import by.tc.dao.XmlDao;
-import by.tc.entity.XmlLevel;
+import by.tc.task02.dao.XmlDao;
+import by.tc.task02.entity.XmlLevel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,7 +41,7 @@ public class XmlParser implements XmlDao {
                     endOfTag.find();
                 } else {
                     XmlLevel level = new XmlLevel();
-                    level.setName(source.substring(endOfTag.start()+1, startOfTag.start()));
+                    level.setName(source.substring(endOfTag.start()+1, startOfTag.start()).trim());
                     level.setParent(previousLevel);
                     previousLevel=previousLevel.getParent();
                     endOfTag.find();
