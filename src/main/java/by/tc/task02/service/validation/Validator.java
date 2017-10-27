@@ -8,29 +8,34 @@ import java.util.regex.Pattern;
 
 public class Validator {
 
-    public static boolean isXmlValid (String source){
-        Pattern openTagPattern = Pattern.compile("<[^\\/?].+>");
-        Pattern closeTagPattern = Pattern.compile("<[\\/].+>");
+    private static final String TAG_OPENED = "<[^\\/?][^>]+>";
+    private static final String TAG_CLOSED = "<[\\/][^>]+>";
+    private static final int TAG_NAME = 0;
+
+    public static boolean isXmlValid(String source) {
+
+        Pattern openTagPattern = Pattern.compile(TAG_OPENED);
+        Pattern closeTagPattern = Pattern.compile(TAG_CLOSED);
         Matcher openTag = openTagPattern.matcher(source);
         Matcher closeTag = closeTagPattern.matcher(source);
-        int opened = 0;
-        int closed = 0;
-//        List<String> tags = new ArrayList<String>();
-        while (openTag.find()){
-//            String found = openTag.group();
-//            String tag = found.substring(1, found.length()-2);
-//            tags.add(tag);
-            opened++;
+
+        List<String> openTags = new ArrayList<String>();
+        while (openTag.find()) {
+            String found = openTag.group();
+            String tag = found.substring(1, found.length() - 1).trim().split("\\s")[TAG_NAME].intern();
+            openTags.add(tag);
         }
-//        Collections.reverse(tags);
-        while (closeTag.find()){
-//            String found = closeTag.group();
-//            String tag = found.substring(2, found.length()-2);
-//            if (!tags.get(closed).equals(tag)){
-//                return false;
-//            }
+
+        int closed = 0;
+        while (closeTag.find()) {
+            String found = closeTag.group();
+            String tag = found.substring(2, found.length() - 1).trim();
+            if (!openTags.contains(tag)) {
+                return false;
+            }
             closed++;
         }
-        return opened==closed;
+
+        return openTags.size() == closed;
     }
 }
