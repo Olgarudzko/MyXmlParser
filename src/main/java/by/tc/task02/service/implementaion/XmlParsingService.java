@@ -4,6 +4,7 @@ import by.tc.task02.dao.DAOFactory;
 import by.tc.task02.dao.XmlDao;
 import by.tc.task02.entity.XmlLevel;
 import by.tc.task02.service.ParsingService;
+import by.tc.task02.service.validation.Validator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +23,11 @@ public class XmlParsingService implements ParsingService {
 
     public XmlLevel parse(String source) {
         String xml = readXmlFromFile(getClass(), source);
+
+        if (!Validator.isXmlValid(xml)){
+            return null;
+        }
+
         DAOFactory factory = DAOFactory.getInstance();
         XmlDao applianceDAO = factory.getXmlDao();
 

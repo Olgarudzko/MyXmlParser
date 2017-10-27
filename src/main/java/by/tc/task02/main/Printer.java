@@ -4,7 +4,7 @@ import by.tc.task02.entity.XmlLevel;
 
 public class Printer {
 
-    public static final String XML_IS_NULL = "XML is null";
+    public static final String XML_IS_NULL = "XML is not valid";
     public static final String XML_LEVEL_FORMATTER = "______________________________________________";
 
     public static void print(XmlLevel xml) {
