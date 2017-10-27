@@ -13,12 +13,12 @@ import java.net.URL;
 
 public class XmlParsingService implements ParsingService {
 
-    public static final String NULL_SOURCE = "Source is null";
-    public static final String CHARSET = "UTF-8";
-    public static final String FILE_NOT_FOUND = "File not found";
-    public static final String ERROR_READING_FILE = "Error reading file";
-    public static final String SPACES_BETWEEN_TAGS = ">(\\s)+<";
-    public static final String TAGS_WITHOUT_SPACES = "><";
+    private static final String NULL_SOURCE = "Source is null";
+    private static final String CHARSET = "UTF-8";
+    private static final String FILE_NOT_FOUND = "File not found";
+    private static final String ERROR_READING_FILE = "Error reading file";
+    private static final String SPACES_BETWEEN_TAGS = ">(\\s)+<";
+    private static final String TAGS_WITHOUT_SPACES = "><";
 
     public XmlLevel parse(String source) {
         String xml = readXmlFromFile(getClass(), source);
@@ -31,7 +31,7 @@ public class XmlParsingService implements ParsingService {
 
     public static String readXmlFromFile(Class context, String name) {
 
-        String xml="";
+        String xml = "";
         FileInputStream catalogueReader = null;
 
         try {
@@ -44,7 +44,7 @@ public class XmlParsingService implements ParsingService {
             byte[] content = new byte[catalogueReader.available()];
             catalogueReader.read(content);
             String parsed = new String(content, CHARSET);
-            xml=parsed.replaceAll(SPACES_BETWEEN_TAGS, TAGS_WITHOUT_SPACES);
+            xml = parsed.replaceAll(SPACES_BETWEEN_TAGS, TAGS_WITHOUT_SPACES);
 
         } catch (FileNotFoundException e) {
             System.out.println(FILE_NOT_FOUND);

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class XmlLevel {
 
-    private List <XmlLevel> children;
+    private List<XmlLevel> children;
     private XmlLevel parent;
     private String name;
 
@@ -17,8 +17,8 @@ public class XmlLevel {
         this.children = children;
     }
 
-    private void addChild (XmlLevel child){
-        if (children==null){
+    private void addChild(XmlLevel child) {
+        if (children == null) {
             children = new ArrayList<XmlLevel>();
         }
         children.add(child);

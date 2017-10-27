@@ -4,5 +4,5 @@ import by.tc.task02.entity.XmlLevel;
 
 public interface ParsingService {
 
-    XmlLevel parse (String source);
+    XmlLevel parse(String source);
 }
