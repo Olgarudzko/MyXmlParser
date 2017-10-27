@@ -5,7 +5,8 @@ import by.tc.task02.entity.XmlLevel;
 public class Printer {
 
     private static final String XML_IS_NULL = "XML is not valid";
-    private static final String XML_LEVEL_FORMATTER = "_______________________________________________________________";
+    public static final int FRAME_PADDING = 6;
+    public static final int FIRST_LEVEL_PADDING = 5;
 
     public static void print(XmlLevel xml) {
         if (xml != null) {
@@ -22,18 +23,26 @@ public class Printer {
         }
     }
 
+    private static void printXmlName(XmlLevel xml){
+        char[] stars = new char[xml.getName().length() + FRAME_PADDING];
+        for (int i = 0; i < stars.length; i++) {
+            stars[i] = '*';
+        }
+        System.out.println(stars);
+        System.out.println("*  " + xml.getName().toUpperCase() + "  *");
+        System.out.println(stars);
+    }
+
     private static void printOtherLevels(XmlLevel xml, int levelNumber) {
 
-        char[] padding = new char[levelNumber*5];
-        for (int i = 0; i<padding.length; i++){
-            padding[i]=' ';
-        }
+        System.out.print(definePaddingForLevel(levelNumber));
 
         if (xml.getChildren() != null) {
-            System.out.print(padding);
+
             System.out.println(xml.getName().toUpperCase());
+
             if (xml.getChildren().size() > 1) {
-                System.out.println(XML_LEVEL_FORMATTER);
+                System.out.println();
             }
 
             for (XmlLevel level : xml.getChildren()) {
@@ -41,21 +50,18 @@ public class Printer {
             }
 
             if (xml.getChildren().size() > 1) {
-                System.out.println(XML_LEVEL_FORMATTER);
+                System.out.println();
             }
         } else {
-            System.out.print(padding);
             System.out.println(" --> " + xml.getName());
         }
     }
 
-    private static void printXmlName(XmlLevel xml){
-        char[] stars = new char[xml.getName().length() + 6];
-        for (int i = 0; i < stars.length; i++) {
-            stars[i] = '*';
+    private static char [] definePaddingForLevel(int levelNumber){
+        char[] padding = new char[levelNumber* FIRST_LEVEL_PADDING];
+        for (int i = 0; i<padding.length; i++){
+            padding[i]=' ';
         }
-        System.out.println(stars);
-        System.out.println("*  " + xml.getName().toUpperCase() + "  *");
-        System.out.println(stars);
+        return padding;
     }
 }

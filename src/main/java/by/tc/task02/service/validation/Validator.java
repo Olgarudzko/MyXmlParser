@@ -22,20 +22,29 @@ public class Validator {
         List<String> openTags = new ArrayList<String>();
         while (openTag.find()) {
             String found = openTag.group();
-            String tag = found.substring(1, found.length() - 1).trim().split("\\s")[TAG_NAME].intern();
+            String tag = found.substring(1, found.length() - 1).trim()
+                    .split("\\s")[TAG_NAME].intern();
             openTags.add(tag);
         }
 
         int closed = 0;
+        String lastCloseTag=null;
         while (closeTag.find()) {
             String found = closeTag.group();
-            String tag = found.substring(2, found.length() - 1).trim();
-            if (!openTags.contains(tag)) {
+            lastCloseTag = found.substring(2, found.length() - 1).trim();
+            if (!openTags.contains(lastCloseTag)) {
                 return false;
             }
             closed++;
         }
 
-        return openTags.size() == closed;
+        int count = 0;
+        for (String tag: openTags){
+            if (tag.equals(lastCloseTag)){
+                count++;
+            }
+        }
+
+        return openTags.get(0).equals(lastCloseTag) && count==1 && openTags.size() == closed;
     }
 }
