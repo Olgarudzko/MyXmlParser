@@ -23,7 +23,7 @@ public class Printer {
         }
     }
 
-    private static void printXmlName(XmlLevel xml){
+    private static void printXmlName(XmlLevel xml) {
         char[] stars = new char[xml.getName().length() + FRAME_PADDING];
         for (int i = 0; i < stars.length; i++) {
             stars[i] = '*';
@@ -41,27 +41,30 @@ public class Printer {
 
             System.out.println(xml.getName().toUpperCase());
 
-            if (xml.getChildren().size() > 1) {
-                System.out.println();
-            }
+            lineBetweenLevels(xml);
 
             for (XmlLevel level : xml.getChildren()) {
-                printOtherLevels(level, levelNumber+1);
+                printOtherLevels(level, levelNumber + 1);
             }
 
-            if (xml.getChildren().size() > 1) {
-                System.out.println();
-            }
+            lineBetweenLevels(xml);
+
         } else {
             System.out.println(" --> " + xml.getName());
         }
     }
 
-    private static char [] definePaddingForLevel(int levelNumber){
-        char[] padding = new char[levelNumber* FIRST_LEVEL_PADDING];
-        for (int i = 0; i<padding.length; i++){
-            padding[i]=' ';
+    private static char[] definePaddingForLevel(int levelNumber) {
+        char[] padding = new char[levelNumber * FIRST_LEVEL_PADDING];
+        for (int i = 0; i < padding.length; i++) {
+            padding[i] = ' ';
         }
         return padding;
+    }
+
+    private static void lineBetweenLevels(XmlLevel xml){
+        if (xml.getChildren().size() > 1) {
+            System.out.println();
+        }
     }
 }

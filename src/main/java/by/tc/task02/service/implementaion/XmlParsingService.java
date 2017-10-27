@@ -24,14 +24,14 @@ public class XmlParsingService implements ParsingService {
     public XmlLevel parse(String source) {
         String xml = readXmlFromFile(getClass(), source);
 
-        if (!Validator.isXmlValid(xml)){
+        if (!Validator.isXmlValid(xml)) {
             return null;
         }
 
         DAOFactory factory = DAOFactory.getInstance();
-        XmlDao applianceDAO = factory.getXmlDao();
+        XmlDao xmlDAO = factory.getXmlDao();
 
-        XmlLevel resultXml = applianceDAO.parseXml(xml);
+        XmlLevel resultXml = xmlDAO.parseXml(xml);
         return resultXml;
     }
 

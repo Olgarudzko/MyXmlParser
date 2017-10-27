@@ -13,10 +13,6 @@ public class XmlLevel {
         return children;
     }
 
-    public void setChildren(List<XmlLevel> children) {
-        this.children = children;
-    }
-
     private void addChild(XmlLevel child) {
         if (children == null) {
             children = new ArrayList<XmlLevel>();
