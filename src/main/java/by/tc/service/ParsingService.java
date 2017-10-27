@@ -1,8 +1,8 @@
 package by.tc.service;
 
-import by.tc.entity.EntireXml;
+import by.tc.entity.XmlLevel;
 
 public interface ParsingService {
 
-    EntireXml parse (String source);
+    XmlLevel parse (String source);
 }

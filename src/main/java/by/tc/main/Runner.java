@@ -1,6 +1,6 @@
 package by.tc.main;
 
-import by.tc.entity.EntireXml;
+import by.tc.entity.XmlLevel;
 import by.tc.service.ParsingFactory;
 import by.tc.service.ParsingService;
 
@@ -10,11 +10,11 @@ public class Runner {
         ParsingFactory factory = ParsingFactory.getInstance();
         ParsingService service = factory.getParsingService();
 
-        EntireXml example1 = service.parse("example.xml");
-        Printer.printXml(example1);
+        XmlLevel example1 = service.parse("example.xml");
+        Printer.print(example1);
 
-//        EntireXml example2 = service.parse("example2.xml");
-//        Printer.printXml(example2);
 
+        XmlLevel example2 = service.parse("example2.xml");
+        Printer.print(example2);
     }
 }

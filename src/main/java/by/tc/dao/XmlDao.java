@@ -1,8 +1,8 @@
 package by.tc.dao;
 
-import by.tc.entity.EntireXml;
+import by.tc.entity.XmlLevel;
 
 public interface XmlDao {
 
-    EntireXml parseXml(String source);
+    XmlLevel parseXml(String source);
 }
