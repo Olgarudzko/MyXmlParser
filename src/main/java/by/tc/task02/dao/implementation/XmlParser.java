@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class XmlParser implements XmlDao {
 
-    public static final int NEXT_SYMBOL = 1;
+    private static final int NEXT_SYMBOL = 1;
     private final Pattern startOfTagPattern = Pattern.compile("<");
     private Matcher startOfTag;
     private final Pattern endOfTagPattern = Pattern.compile(">");

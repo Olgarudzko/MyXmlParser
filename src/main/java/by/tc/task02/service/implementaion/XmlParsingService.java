@@ -5,6 +5,7 @@ import by.tc.task02.dao.XmlDao;
 import by.tc.task02.entity.XmlLevel;
 import by.tc.task02.service.ParsingService;
 import by.tc.task02.service.validation.Validator;
+import by.tc.task02.service.validation.XmlValidationException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,19 +24,18 @@ public class XmlParsingService implements ParsingService {
 
     public XmlLevel parse(String source) {
         String xml = readXmlFromFile(getClass(), source);
-
-        if (!Validator.isXmlValid(xml)) {
-            return null;
+        try {
+            Validator.isXmlValid(xml);
+            DAOFactory factory = DAOFactory.getInstance();
+            XmlDao xmlDAO = factory.getXmlDao();
+            return xmlDAO.parseXml(xml);
+        } catch (XmlValidationException e) {
+            System.out.println(e.getMessage());
         }
-
-        DAOFactory factory = DAOFactory.getInstance();
-        XmlDao xmlDAO = factory.getXmlDao();
-
-        XmlLevel resultXml = xmlDAO.parseXml(xml);
-        return resultXml;
+        return null;
     }
 
-    public static String readXmlFromFile(Class context, String name) {
+    private static String readXmlFromFile(Class context, String name) {
 
         String xml = "";
         FileInputStream catalogueReader = null;

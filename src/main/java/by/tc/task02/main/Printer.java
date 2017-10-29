@@ -5,8 +5,8 @@ import by.tc.task02.entity.XmlLevel;
 public class Printer {
 
     private static final String XML_IS_NULL = "XML is not valid";
-    public static final int FRAME_PADDING = 6;
-    public static final int FIRST_LEVEL_PADDING = 5;
+    private static final int FRAME_PADDING = 6;
+    private static final int FIRST_LEVEL_PADDING = 5;
 
     public static void print(XmlLevel xml) {
         if (xml != null) {
@@ -67,4 +67,6 @@ public class Printer {
             System.out.println();
         }
     }
+
+    private Printer(){}
 }

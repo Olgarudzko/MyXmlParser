@@ -7,15 +7,16 @@ import java.util.regex.Pattern;
 
 public class Validator {
 
-    private static final String TAG_OPENED = "<[^\\/?][^>]+>";
-    private static final String TAG_CLOSED = "<[\\/][^>]+>";
+    private static final String TAG_OPENED = "<[^/?][^>]+>";
+    private static final String TAG_CLOSED = "<[/][^>]+>";
     private static final int TAG_NAME = 0;
     private static final String ONE_LEVEL_NOT_ENOUGH = "XML should consist of at least two levels";
     private static final String TAG_NOT_FOUND = "Matching opening tag not found: ";
     private static final String WRONG_MAIN_TAG = "Wrong use of the main tag";
     private static final String FORBIDDEN_SEQUENCE = "Forbidden sequence: ";
+    private static final String ILLEGAL_AMOUNT_OF_TAGS = "Not equal amount of opening and closing tags.";
 
-    public static boolean isXmlValid(String source) {
+    public static void isXmlValid(String source) throws XmlValidationException {
 
         Pattern openTagPattern = Pattern.compile(TAG_OPENED);
         Pattern closeTagPattern = Pattern.compile(TAG_CLOSED);
@@ -30,59 +31,63 @@ public class Validator {
             tags.add(tag);
         }
 
-        if (!(tags.size()>1)){
-            System.out.println(ONE_LEVEL_NOT_ENOUGH);
-            return false;
+        if (tags.size() <= 1) {
+            throw new XmlValidationException(ONE_LEVEL_NOT_ENOUGH);
         }
 
         int closed = 0;
-        String lastCloseTag=null;
+        String lastCloseTag = null;
         while (closeTag.find()) {
             String found = closeTag.group();
             lastCloseTag = found.substring(2, found.length() - 1).trim();
             if (!tags.contains(lastCloseTag)) {
-                System.out.println(TAG_NOT_FOUND + found);
-                return false;
+                throw new XmlValidationException(TAG_NOT_FOUND + found);
             }
             closed++;
         }
 
-       if(!isRootTagValid(tags, lastCloseTag)){
-            System.out.println(WRONG_MAIN_TAG);
-            return false;
-        };
+        if (!isRootTagValid(tags, lastCloseTag)) {
+            throw new XmlValidationException(WRONG_MAIN_TAG);
+        }
 
-        return !hasEmptyTags(source) && tags.size() == closed;
+        if (tags.size() != closed){
+            throw new XmlValidationException(ILLEGAL_AMOUNT_OF_TAGS);
+        }
+
+        String emptyTag=hasEmptyTags(source);
+        if (emptyTag!=null){
+            throw new XmlValidationException(FORBIDDEN_SEQUENCE+emptyTag);
+        }
     }
 
-    private static boolean isRootTagValid(List<String> tags, String rootTag){
+    private static boolean isRootTagValid(List<String> tags, String rootTag) {
 
-        if (!tags.get(0).equals(rootTag)){
+        if (!tags.get(0).equals(rootTag)) {
             return false;
         }
 
         int mainTagOccurence = 0;
-        for (String tag: tags){
-            if (tag.equals(rootTag)){
+        for (String tag : tags) {
+            if (tag.equals(rootTag)) {
                 mainTagOccurence++;
             }
         }
 
-        return mainTagOccurence==1;
+        return mainTagOccurence == 1;
     }
 
 
-    private static boolean hasEmptyTags(String source){
+    private static String hasEmptyTags(String source) {
 
-        Pattern openCloseTagPattern = Pattern.compile(TAG_OPENED+TAG_CLOSED);
+        Pattern openCloseTagPattern = Pattern.compile(TAG_OPENED + TAG_CLOSED);
         Matcher openCloseTag = openCloseTagPattern.matcher(source);
-
-        if (openCloseTag.find()){
-            String found = openCloseTag.group().trim();
-            System.out.println(FORBIDDEN_SEQUENCE + found);
-            return true;
+        String found=null;
+        if (openCloseTag.find()) {
+            found = openCloseTag.group().trim();
+            return found;
         }
 
-        return false;
+        return null;
     }
+    private Validator(){}
 }
